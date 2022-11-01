@@ -1,6 +1,7 @@
 package com.springframework.dependencyinjection;
 
 import com.springframework.dependencyinjection.controllers.*;
+import com.springframework.dependencyinjection.services.BeanLifeCycleDemoBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -10,6 +11,8 @@ public class DependencyInjectionApplication {
 
 	public static void main(String[] args) {
 		ApplicationContext context = SpringApplication.run(DependencyInjectionApplication.class, args);
+
+		BeanLifeCycleDemoBean beanLifeCycleDemoBean = (BeanLifeCycleDemoBean) context.getBean("beanLifeCycleDemoBean");
 
 		I18nController i18nController = (I18nController) context.getBean("i18nController");
 		System.out.println(i18nController.sayHello());
