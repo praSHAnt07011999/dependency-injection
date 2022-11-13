@@ -1,13 +1,25 @@
 package com.springframework.dependencyinjection.config;
 
+import com.springframework.dependencyinjection.datasource.FakeDataSource;
+import com.springframework.dependencyinjection.repositories.EnglishGreetingRepository;
+import com.springframework.dependencyinjection.repositories.EnglishGreetingRepositoryImpl;
 import com.springframework.dependencyinjection.services.*;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.*;
 
+@EnableConfigurationProperties(SfgConstructorConfig.class)
 @Configuration
 public class GreetingServiceConfig {
+
+    @Bean
+    FakeDataSource fakeDataSource(SfgConstructorConfig sfgConstructorConfig){
+        FakeDataSource fakeDataSource = new FakeDataSource();
+        fakeDataSource.setUsername(sfgConstructorConfig.getUsername());
+        fakeDataSource.setPassword(sfgConstructorConfig.getPassword());
+        fakeDataSource.setJdbcUrl(sfgConstructorConfig.getJdbcUrl());
+        return fakeDataSource;
+    }
 
     @Bean("i18nService")
     @Profile({"ES", "default"})
@@ -16,9 +28,13 @@ public class GreetingServiceConfig {
     }
 
     @Bean
+    EnglishGreetingRepository englishGreetingRepository(){
+        return new EnglishGreetingRepositoryImpl();
+    }
+    @Bean
     @Profile("EN")
-    I18nEnglishGreetingService i18nService() {
-        return new I18nEnglishGreetingService();
+    I18nEnglishGreetingService i18nService(EnglishGreetingRepository englishGreetingRepository) {
+        return new I18nEnglishGreetingService(englishGreetingRepository);
     }
 
     @Bean

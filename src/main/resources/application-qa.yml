@@ -1,0 +1,4 @@
+spring:
+  username: YmlQaUserName
+  password: YmlQaPassword
+  jdbcurl: YmlQaUrl

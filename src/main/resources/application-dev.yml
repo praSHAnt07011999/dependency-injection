@@ -1,0 +1,4 @@
+spring:
+  username: YmlDevUserName
+  password: YmlDevPassword
+  jdbcurl: YmlDevUrl
